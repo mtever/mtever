@@ -32,18 +32,20 @@ double Integral(double a, double b, int n, double y)
 
 void with_cilk_for(double a, double b, int n)
 {
+	double sum = 0;
 	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 	//cilk::reducer_opadd<long int> sum(0);
 	//cilk::reducer_opadd<double> y(0);
-	//y = 0;
+	y = 0;
 	dy = (b - a) / n;
-	y += func(a) + func(b);
+//	y += func(a) + func(b);
+	cilk::reducer_opadd <double> y(func(a) + func(b));
 	cilk_for(int ii = 1; ii < n; ii++)
 	{
 		y += 2 * (func(a + dy * ii));
 	}
-
-	In = Integral(a, b, n, y);
+	sum = y.get_value();
+	In = Integral(a, b, n, sum);
 	cout << "При n = " << n << "  ";
 	cout << "Интеграл: " << setprecision(10) << In << "   ";
 	high_resolution_clock::time_point t2 = high_resolution_clock::now();
