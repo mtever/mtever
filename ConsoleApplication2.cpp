@@ -56,8 +56,10 @@ int main()
 	for (int k = 0; k < len_n; k++)
 	{
 		without_parall(a, b, n[k]);
+		int B = 10;
 	}
 
 	cout << endl;
+	cout << B;
 	return 0;
 }
